@@ -1,0 +1,11 @@
+version: '2'
+services:
+  db:
+    image: postgres
+  web_production:
+    build: .
+    image: wordpresshosting_web_nginx
+    ports:
+      - "8113:8113"
+    depends_on:
+      - db
