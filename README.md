@@ -9,10 +9,10 @@ I added a docker-compose file to ease deployment.
 Copy the root of your Django project into the app folder, make sure to include a `requirements.txt` file. 
 You need to modify the following files:
 
-uwsgi.ini
-	- Line module=your_app.wsgi:application. `your_app` needs to be the name of your django project, i.e. the folder name where wsgi.py lives.
-nginx-app.conf
-- Lines referring to static and media content. Use their full paths.
+- [uwsgi.ini]
+Line module=your_app.wsgi:application. `your_app` needs to be the name of your django project, i.e. the folder name where wsgi.py lives.
+- [nginx-app.conf]
+Lines referring to static and media content. Use their full paths.
 
 
 Then:
