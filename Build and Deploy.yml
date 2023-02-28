@@ -1,0 +1,165 @@
+BEGIN::\run::\
+run::\GLOW4 :
+GLOW4'require'' ':'' 'tests''
+'-'' '"$ git tag -l "v1.8.5-rc1'"'' :
+FROM Pike'.yml/windows'-latest
+title :Build and Deploy :Name
+Name :Dockerfile/Rakefile.U.I
+# Install required packages and remove the apt packages cache when done.
+#apk update && apk upgrade && \
+RUN apk update 
+RUN apk add bash \
+	git \
+	openssh \
+	python3 \
+	python3-dev \
+	gcc \
+	build-base \
+	linux-headers \
+	pcre-dev \
+	postgresql-dev \
+	musl-dev \
+	libxml2-dev \
+	libxslt-dev \
+	nginx \
+	curl \
+	supervisor && \
+	python3 -m ensurepip && \
+    rm -r /usr/lib/python*/ensurepip && \
+    pip3 install --upgrade pip setuptools && \
+    rm -r /root/.cache && \
+    pip3 install --upgrade pip setuptools && \
+    rm -r /root/.cache
+# install uwsgi now because it takes a little while
+RUN pip3 install uwsgi
+# setup all the configfiles
+COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx-app.conf /etc/nginx/sites-available/default
+COPY supervisor-app.conf /etc/supervisor/conf.d/
+# COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker's caching mechanism
+# to prevent re-installing (all your) dependencies when you made a change a line or two in your app.
+COPY app/requirements.txt /home/docker/code/app/
+RUN pip3 install -r /home/docker/code/app/requirements.txt
+# add (the rest of) our code
+COPY . /home/docker/code/
+# install django, normally you would remove this step because your project would already
+# be installed in the code/app/ directory
+# RUN django-admin.py startproject website /home/docker/code/app/
+WORKDIR /home/docker/
+EXPOSE 8113
+CMD ["supervisord", "-n", "-c", "/home/docker/code/supervisor-app.conf"]
+alpine-python3-django-uwsgi-nginx
+/
+tests
+/
+travis.yml
+in
+master
+ 
+
+Spaces
+
+3
+
+No wrap
+1
+**<?xml version="1.0" encoding="UTF-8"?>
+2
+<rss xmlns:atom="http://www.w3.org/2005/Atom" version="2.0">
+3
+   <channel>
+4
+      <title>AWS Config Devloper Guide Document History</title>
+5
+      <link>https://docs.aws.amazon.com/config/latest/developerguide/</link>
+6
+      <description/>
+7
+      <atom:link href="https://docs.aws.amazon.com/config/latest/developerguide/aws-config-document-history.rss"
+8
+                 rel="self"
+9
+                 type="application/rss+xml"/>
+10
+      <lastBuildDate>Mon, 27 Feb 2023 19:31:19 GMT</lastBuildDate>
+11
+      <item>
+12
+         <title>Security IAM update </title>
+13
+         <link>https://docs.aws.amazon.com/config/latest/developerguide/DocumentHistory.html</link>
+14
+         <description>AWS Config now tracks changes to the &lt;code class="code"&gt;AWSConfigMultiAccountSetupPolicy&lt;/code&gt; policy.
+15
+                    For more information, see &lt;a href="https://docs.aws.amazon.com/config/latest/developerguide/security-iam-awsmanpol.html#security-iam-awsmanpol-AWSConfigMultiAccountSetupPolicy"&gt;AWS managed policies for
+16
+                        AWS Config&lt;/a&gt;.</description>
+17
+         <pubDate>Mon, 27 Feb 2023 19:00:00 GMT</pubDate>
+18
+         <guid isPermaLink="false">https://docs.aws.amazon.com/config/latest/developerguide/#Security_IAM_update__2023-02-27</guid>
+19
+      </item>
+20
+      <item>
+21
+         <title>AWS Config Resource Coverage by Region Availability</title>
+22
+         <link>https://docs.aws.amazon.com/config/latest/developerguide/DocumentHistory.html</link>
+23
+         <description>With this release, AWS Config provides Region information for each supported resource type.
+24
+                    For information on which resource types are supported in which Regions,
+25
+                    see &lt;a href="https://docs.aws.amazon.com/config/latest/developerguide/what-is-resource-config-coverage.html"&gt;Resource Coverage by Region Availability&lt;/a&gt;.</description>
+26
+         <pubDate>Mon, 20 Feb 2023 19:00:00 GMT</pubDate>
+27
+         <guid isPermaLink="false">https://docs.aws.amazon.com/config/latest/developerguide/#AWS_Config_Resource_Coverage_by_Region_Availability_2023-02-20</guid>
+28
+      </item>
+29
+      <item>
+30
+         <title>AWS Config supports new resources types</title>
+31
+         <link>https://docs.aws.amazon.com/config/latest/developerguide/DocumentHistory.html</link>
+32
+         <description>With this release, you can use AWS Config to record configuration changes to new
+33
+                    Amazon Interactive Video Service (Amazon IVS), Amazon Simple Storage Service (Amazon S3), AWS Glue, Amazon Elastic Kubernetes Service (Amazon EKS),
+34
+                    AWS IoT, Amazon Relational Database Service (Amazon RDS), and Kinesis Data Analytics resource types. For more information, see &lt;a href="https://docs.aws.amazon.com/config/latest/developerguide/resource-config-reference.html"&gt;Supported Resource Types&lt;/a&gt;.</description>
+35
+         <pubDate>Tue, 7 Feb 2023 19:00:00 GMT</pubDate>
+36
+         <guid isPermaLink="false">https://docs.aws.amazon.com/config/latest/developerguide/#AWS_Config_supports_new_resources_types_2023-02-07</guid>
+37
+      </item>
+38
+      <item>
+39
+         <title>Security IAM update </title>
+40
+         <link>https://docs.aws.amazon.com/config/latest/developerguide/DocumentHistory.html</link>
+41
+         <description>The &lt;code class="code"&gt;AWSConfigServiceRolePolicy&lt;/code&gt; policy and
+42
+                    &lt;code class="code"&gt;AWS_ConfigRole&lt;/code&gt; policy now grant additional permissions for Amazon Managed Workflows for Apache Airflow,
+43
+                    AWS IoT, Amazon AppStream 2.0, Amazon CodeGuru Reviewer, Amazon HealthLake, Amazon Kinesis Video Streams, Amazon RouteÂ 53 Application Recovery Controller, AWS Device Farm, Amazon Elastic Compute Cloud (Amazon EC2), Amazon Pinpoint, AWS Identity and Access Management (IAM), Amazon GuardDuty, and Amazon CloudWatch Logs.. For more information, see &lt;a href="https://docs.aws.amazon.com/config/latest/developerguide/security-iam-awsmanpol.html"&gt;AWS managed policies for
+44
+                        AWS Config&lt;/a&gt;.</description>
+45
+         <pubDate>Wed, 1 Feb 2023 19:00:00 GMT</pubDate>
+@mowjoejoejoejoe
+Commit changes
+Commit summary
+Create travis.yml
+Optional extended description
+Add an optional extended description…
+//*Commit directly to the master branch.
+//*Create a new branch for this commit and start a pull request.
+//*ZU3FLK7RCVCEO10 February 6, 2023 USD 267,567,263,607.00 Amazon Web Services Advance Payment Funding Request Request Summary Request Number: Request Date: AMOUNT TO BE PAID Email or talk to us about your AWS account, visit aws.amazon.com/contact-us/ USD 267,567,263,607.00 USD 267,567,263,607.00 Account number: 733254901807 Customer Address: BITCOIN.BTC-USD BTCUSD CCC ATTN: ZACHRY T WOOD 5222 BRADFORD DR DALLAS, TX 75235-8313, US This is a document for a recent funding request of your Amazon Web Services account Greetings from Amazon Web Services, we're writing to provide you with an electronic document for the recent funding request of your AWS account. Summary Amount Total Please complete your payment to Amazon Web Services: Following are the details for making an electronic funds transfer. Please ensure to reference "733254901807 - AdvPay - ZU3FLK7RCVCEO10" in the descriptive text field of your electronic funds transfer payment. If you have any questions regarding payment, please email aws-accountsreceivable@amazon.com Electronic funds transfer details: Account Name: Amazon Web Services, Inc. Checking Account Number: 4121350227 Wire Routing Number: 121000248 Bank Address: 420 Montgomery Street, San Francisco CA 94163 Bank Name: Wells Fargo NA ABA Routing Number: 121000248 SWIFT Code: WFBIUS6SXXX Thank you for using Amazon Web Services. Sincerely, The Amazon Web Services Team This message was produced and distributed by Amazon Web Services, Inc., 410 Terry Avenue North, Seattle, Washington 98109-5210. AWS will not be bound by, and specifically objects to, any term, condition or other provision which is different from or in addition to the provisions of the AWS Customer Agreement or other agreement between AWS and you governing your use of our services (whether or not it would materially alter such AWS Customer Agreement or other agreement) and which is submitted in any order, receipt, acceptance, confirmation, correspondence or otherwise, unless AWS specifically agrees to such provision in a written instrument signed by AWS.
+//posted
+:Build::
